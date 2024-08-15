@@ -7,7 +7,7 @@ from nltk.corpus import wordnet
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
-
+import os
 
 data = pd.read_csv('../IMDB Dataset.csv')
 
@@ -58,6 +58,9 @@ test_data = {
     'features': X_test_tfidf,
     'labels': y_test
 }
+
+
+os.makedirs("./files",exist_ok=True)
 
 # Сохранение тренировочных данных в pickle
 with open('./files/train_data.pkl', 'wb') as f:
