@@ -3,7 +3,8 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from sklearn.svm import LinearSVC
 import pickle
 import matplotlib.pyplot as plt
-
+from sklearn.model_selection import cross_val_score, KFold
+import numpy as np
 with open('./files/train_data.pkl', 'rb') as f:
     loaded_train_data = pickle.load(f)
 
@@ -18,12 +19,24 @@ y_train = loaded_train_data['labels']
 X_test = loaded_test_data['features']
 y_test = loaded_test_data['labels']
 
+X = np.concatenate((X_train,X_test),axis = 0)
+y = np.concatenate((y_train,y_test), axis = 0)
+
 # Линейный SVM классификатор
 model = LinearSVC(C=1, max_iter = 1000)
 model.fit(X_train,y_train)
 
 y_pred = model.predict(X_test)
 y_score = model.decision_function(X_test)
+
+kf = KFold(n_splits=4, shuffle=True, random_state=42)
+
+# Выполнение кросс-валидации
+scores = cross_val_score(model, X, y, cv=kf, scoring='accuracy')
+
+# Вывод результатов
+print(f'Accuracy per fold: {scores}')
+print(f'Average accuracy: {np.mean(scores)}')
 
 # ROC-AUC
 fpr, tpr, _ = roc_curve(y_test, y_score)
