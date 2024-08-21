@@ -9,7 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
 import os
 
-data = pd.read_csv('../IMDB Dataset.csv')
+data = pd.read_csv('./IMDB Dataset.csv')
 
 # Загрузка стоп-слов
 nltk.download('stopwords')
@@ -69,3 +69,6 @@ with open('./files/train_data.pkl', 'wb') as f:
 # Сохранение тестовых данных в pickle
 with open('./files/test_data.pkl', 'wb') as f:
     pickle.dump(test_data, f)
+
+data.to_csv('./files/Cleaned_Data.csv')
+
